@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#d7f1f7" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="Acompanhe a água, a creatina e a vitamina D do seu dia." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Hidrata" />
+    <title>Hidrata</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <p id="boot" class="boot">Carregando…</p>
+    <noscript>
+      <p class="noscript">O Hidrata precisa de JavaScript para guardar a água neste aparelho.</p>
+    </noscript>
+
+    <div id="onboarding" class="onboarding" hidden>
+      <form id="onboard-form" class="onboard-card">
+        <p class="wordmark"><span class="drop" aria-hidden="true"></span> Hidrata</p>
+        <h1>Qual é a sua meta de água?</h1>
+        <p class="lead">Quantos mililitros você quer beber por dia? A sugestão é 2.000 ml, ou 2 litros.</p>
+        <label for="onboard-goal">Meta diária</label>
+        <div class="goal-field">
+          <input id="onboard-goal" name="goal" inputmode="numeric" autocomplete="off" enterkeyhint="done" value="2000" maxlength="4" />
+          <span>ml</span>
+        </div>
+        <p id="onboard-hint" class="hint">2 litros. Você pode mudar isso depois, em Ajustes.</p>
+        <p id="onboard-error" class="error" role="alert"></p>
+        <button class="primary" type="submit">Começar</button>
+      </form>
+    </div>
+
+    <div id="app" class="app" hidden>
+      <header class="topbar">
+        <p class="wordmark"><span class="drop" aria-hidden="true"></span> Hidrata</p>
+        <p id="today-date" class="date"></p>
+      </header>
+
+      <main>
+        <section id="view-today">
+          <h2 class="sr-only">Hoje</h2>
+          <div class="stage-hero">
+            <svg id="bottle" class="bottle" viewBox="0 0 220 380" aria-hidden="true">
+              <defs>
+                <linearGradient id="waterFill" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#0d6fa3" />
+                  <stop offset="55%" stop-color="#1aa4cf" />
+                  <stop offset="100%" stop-color="#8fe4f4" />
+                </linearGradient>
+                <path
+                  id="glass-path"
+                  d="M86 50 H134 Q140 50 140 58 V84 C140 98 176 112 190 136 C202 156 204 170 204 186 V300 C204 348 170 364 110 364 C50 364 16 348 16 300 V186 C16 170 18 156 30 136 C44 112 80 98 80 84 V58 Q80 50 86 50 Z"
+                />
+                <clipPath id="cavity">
+                  <use href="#glass-path" />
+                </clipPath>
+              </defs>
+              <use href="#glass-path" fill="rgba(255,255,255,0.45)" />
+              <g clip-path="url(#cavity)">
+                <g id="water">
+                  <rect id="water-rect" x="-20" y="0" width="260" height="0" fill="url(#waterFill)" />
+                  <g>
+                    <animateTransform attributeName="transform" type="translate" from="0 0" to="-40 0" dur="2.8s" repeatCount="indefinite" />
+                    <path fill="#e7fbff" fill-opacity="0.7" d="M-40 0 Q-30 -8 -20 0 T0 0 T20 0 T40 0 T60 0 T80 0 T100 0 T120 0 T140 0 T160 0 T180 0 T200 0 T220 0 T240 0 V18 H-40 Z" />
+                  </g>
+                  <g>
+                    <animateTransform attributeName="transform" type="translate" from="-40 0" to="0 0" dur="4.4s" repeatCount="indefinite" />
+                    <path fill="#ffffff" fill-opacity="0.35" d="M-40 3 Q-30 -4 -20 3 T0 3 T20 3 T40 3 T60 3 T80 3 T100 3 T120 3 T140 3 T160 3 T180 3 T200 3 T220 3 T240 3 V16 H-40 Z" />
+                  </g>
+                  <circle class="bubble" cx="70" cy="36" r="4" fill="#ffffff" fill-opacity="0.55" />
+                  <circle class="bubble delay" cx="140" cy="72" r="2.6" fill="#ffffff" fill-opacity="0.4" />
+                  <circle class="bubble" cx="108" cy="112" r="4.5" fill="#ffffff" fill-opacity="0.28" />
+                </g>
+              </g>
+              <use href="#glass-path" fill="none" stroke="#8fd0e0" stroke-width="3.5" />
+              <path d="M46 150 C44 200 48 260 52 310" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="7" stroke-linecap="round" />
+              <rect x="96" y="12" width="28" height="12" rx="4" fill="#0e6584" />
+              <rect x="82" y="22" width="56" height="32" rx="9" fill="#157ea3" />
+              <rect x="92" y="30" width="30" height="6" rx="3" fill="#ffffff" fill-opacity="0.35" />
+            </svg>
+            <div id="hero-card" class="hero-card">
+              <p class="hero-kicker">Água de hoje</p>
+              <p class="hero-total"><strong id="total">0</strong> <span>ml</span></p>
+              <p id="goal-line" class="hero-goal">de 2.000 ml</p>
+              <div
+                id="meter"
+                class="meter"
+                role="meter"
+                aria-valuemin="0"
+                aria-valuemax="2000"
+                aria-valuenow="0"
+                aria-label="Progresso da meta de água"
+              >
+                <span id="meter-bar"></span>
+              </div>
+              <p id="hero-status" class="hero-status">0% da meta</p>
+            </div>
+          </div>
+
+          <div class="sheet">
+            <div class="adds" role="group" aria-label="Adicionar água">
+              <button type="button" data-add="100" aria-label="Adicionar 100 mililitros">+100 ml</button>
+              <button type="button" data-add="250" aria-label="Adicionar 250 mililitros">+250 ml</button>
+              <button type="button" data-add="500" aria-label="Adicionar 500 mililitros">+500 ml</button>
+            </div>
+            <form id="custom-form" class="custom">
+              <label class="sr-only" for="custom-ml">Outra quantidade em mililitros</label>
+              <input id="custom-ml" inputmode="numeric" autocomplete="off" enterkeyhint="done" maxlength="4" placeholder="ml" />
+              <button type="submit">Adicionar</button>
+            </form>
+            <p id="custom-error" class="error" role="alert"></p>
+            <div class="undo-row">
+              <p id="entry-count">Nenhum gole registrado hoje</p>
+              <button type="button" id="undo" class="ghost" disabled>Desfazer último</button>
+            </div>
+
+            <p class="section-label">Também hoje</p>
+            <div class="checks">
+              <button type="button" id="btn-creatine" class="check creatine" role="checkbox" aria-checked="false">
+                <span class="mark" aria-hidden="true"></span>
+                <span class="check-copy">
+                  <strong>Tomei creatina</strong>
+                  <small>Toque para marcar o dia</small>
+                </span>
+              </button>
+              <button type="button" id="btn-vitamin" class="check vitamin" role="checkbox" aria-checked="false">
+                <span class="mark" aria-hidden="true"></span>
+                <span class="check-copy">
+                  <strong>Tomei vitamina D</strong>
+                  <small>Toque para marcar o dia</small>
+                </span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-history" class="panel" hidden>
+          <h2 tabindex="-1">Histórico</h2>
+          <p class="lead">Dias anteriores ficam neste aparelho. À meia-noite o dia recomeça sozinho.</p>
+          <div id="history-list"></div>
+        </section>
+
+        <section id="view-settings" class="panel" hidden>
+          <h2 tabindex="-1">Ajustes</h2>
+
+          <article class="card">
+            <h3>Meta diária</h3>
+            <form id="goal-form">
+              <label for="goal-input">Quanto você quer beber por dia</label>
+              <div class="goal-field">
+                <input id="goal-input" inputmode="numeric" autocomplete="off" enterkeyhint="done" maxlength="4" value="2000" />
+                <span>ml</span>
+              </div>
+              <p id="goal-hint" class="hint">2 litros</p>
+              <p id="goal-error" class="error" role="alert"></p>
+              <button class="primary" type="submit">Salvar meta</button>
+            </form>
+          </article>
+
+          <article class="card">
+            <h3>Lembretes</h3>
+            <p id="permission-text" class="hint">Permita as notificações para receber os lembretes nos horários abaixo.</p>
+            <button type="button" id="enable-notifications" class="primary">Ativar notificações</button>
+            <button type="button" id="test-notification" class="secondary" hidden>Testar notificação</button>
+            <p class="note">
+              Com o app aberto, o aviso sai no horário ou até 90 minutos depois. Fechado, pode atrasar ou não chegar — no
+              iPhone isso é ainda mais limitado. Cada horário toca uma vez por dia.
+            </p>
+
+            <div class="reminder">
+              <label class="switch" for="remind-water">
+                <input id="remind-water" type="checkbox" checked />
+                <span class="switch-ui" aria-hidden="true"></span>
+                <span>Beber água</span>
+              </label>
+              <ul id="water-times" class="times"></ul>
+              <div class="add-time">
+                <label class="sr-only" for="new-time">Novo horário da água</label>
+                <input id="new-time" type="time" value="20:00" />
+                <button type="button" id="add-time">Adicionar horário</button>
+              </div>
+            </div>
+
+            <div class="reminder">
+              <label class="switch" for="remind-creatine">
+                <input id="remind-creatine" type="checkbox" checked />
+                <span class="switch-ui" aria-hidden="true"></span>
+                <span>Creatina</span>
+              </label>
+              <label class="time-label" for="creatine-time">Horário</label>
+              <input id="creatine-time" type="time" value="08:00" />
+            </div>
+
+            <div class="reminder">
+              <label class="switch" for="remind-vitamin">
+                <input id="remind-vitamin" type="checkbox" checked />
+                <span class="switch-ui" aria-hidden="true"></span>
+                <span>Vitamina D</span>
+              </label>
+              <label class="time-label" for="vitamin-time">Horário</label>
+              <input id="vitamin-time" type="time" value="10:00" />
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Instalar no celular</h3>
+            <p id="install-text" class="hint">No Chrome ou no Edge, abra o menu do navegador e escolha Instalar app ou Adicionar à tela inicial.</p>
+            <button type="button" id="install-button" class="primary" hidden>Instalar aplicativo</button>
+          </article>
+        </section>
+      </main>
+
+      <nav class="tabbar" aria-label="Seções">
+        <button type="button" data-view="today" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3c2 4 6 6.5 6 11a6 6 0 1 1-12 0c0-4.5 4-7 6-11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          </svg>
+          Hoje
+        </button>
+        <button type="button" data-view="history">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="5" width="16" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M8 3v4M16 3v4M4 10h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          Histórico
+        </button>
+        <button type="button" data-view="settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          Ajustes
+        </button>
+      </nav>
+      <p id="toast" class="toast" role="status" hidden></p>
+    </div>
+
+    <p id="live" class="sr-only" aria-live="polite"></p>
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
